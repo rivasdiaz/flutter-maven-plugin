@@ -4,9 +4,9 @@
 ![GitHub](https://img.shields.io/github/license/rivasdiaz/flutter-maven-plugin?style=for-the-badge)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/rivasdiaz/flutter-maven-plugin?sort=semver&style=for-the-badge)
 
-A plugin to build Flutter projects with [Maven](https://maven.apache.org).
+A plugin to build [Flutter](https://flutter.dev) projects with [Maven](https://maven.apache.org).
 
-## Usage
+## Basic usage
 
 The plugin assumes the project follows the structure required by the Flutter SDK.
 
@@ -21,9 +21,11 @@ to match the plugin.
 
   <groupId>YOUR PROJECT GROUP ID</groupId>
   <artifactId>YOUR PROJECT ARTIFACT ID</artifactId>
-  <packaging>flutter</packaging>
+  <version>0.0.0-SNAPSHOT</version>
 
-  <!-- additional project configuration -->
+  <packaging>flutter</packaging> :one:
+
+  <!-- ... -->
 </project>
 ```
 
@@ -35,13 +37,13 @@ Add a reference to Jitpack in your project `pom.xml`
 
 ```xml
 <project>
-  <!-- additional project configuration -->
+  <!-- ... -->
 
   <pluginRepositories>
     <pluginRepository>
       <id>jitpack</id>
       <name>JitPack</name>
-      <url>https://jitpack.io</url>
+      <url>https://jitpack.io</url> :two:
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -51,7 +53,7 @@ Add a reference to Jitpack in your project `pom.xml`
     </pluginRepository>
   </pluginRepositories>
 
-  <!-- additional project configuration -->
+  <!-- ... -->
 </project>
 ```
 
@@ -62,15 +64,15 @@ build directory.
 
 ```xml
 <project>
-  <!-- additional project configuration -->
+  <!-- ... -->
 
   <build>
-    <directory>${project.basedir}/build</directory>
+    <directory>${project.basedir}/build</directory> :three:
 
-    <!-- additional build configuration -->
+    <!-- ... -->
   </build>
 
-  <!-- additional project configuration -->
+  <!-- ... -->
 </project>
 ```
 
@@ -80,30 +82,90 @@ Declare the flutter plugin. Make sure to include `<extensions>true</extensions>`
 to configure tasks on the lifecycle.
 
 ```xml
+<project>
+  <!-- ... -->
+
   <build>
-    <!-- additional build configuration -->
+    <!-- ... -->
 
     <plugins>
       <plugin>
         <groupId>com.github.rivasdiaz</groupId>
-        <artifactId>flutter-maven-plugin</artifactId>
+        <artifactId>flutter-maven-plugin</artifactId> :four:
         <extensions>true</extensions>
         <!-- flutter plugin configuration -->
       </plugin>
       
-      <!-- other plugins -->
+      <!-- ... -->
     </plugins>
   
-    <!-- additional build configuration -->
+    <!-- ... -->
   </build>
+
+  <!-- ... -->
+</project>
+```
+
+### Using the plugin
+
+#### Flutter project skeleton creation
+
+If you haven't created your Flutter project yet, you can create a basic project by running:
+
+```shell
+mvn flutter:create
+```
+
+This will create the project using the configuration defined on your POM. Make sure to include
+the description tag as that's used to generate the `pubspec.yaml`.
+
+Add the parameter `-Dflutter.target.platforms=<flutter platform list>` to generate scaffolding
+for only a subset of the supported platforms, for example:
+
+```shell
+mvn flutter:create -Dflutter.target.platforms=web
+```
+
+#### Building
+
+To build your project, use the command:
+
+```shell
+mvn package
+```
+
+All supported platforms will be built. Use `-Dflutter.target.<platform>.skip=true` to optionally 
+skip building some platforms.
+
+#### Running
+
+To run your project, use the command:
+
+```shell
+mvn flutter:run -Dflutter.target.device=<device>
+```
+
+This command is not part of any maven lifecycle, and requires dependencies to be resolved. If you
+have never build the project before, you can use `flutter:dependencies` target.
+
+For example, to run the web version of the app, use:
+
+```shell
+mvn flutter:dependencies flutter:run -Dflutter.target.device=chrome
+```
+
+You can check the list of available devices, by running:
+
+```shell
+mvn flutter:devices
 ```
 
 ## Lifecycle
 
-* `clean` &#8594; `flutter-maven-plugin:clean`
-* `initialize` &#8594; `flutter-maven-plugin:dependencies`
-* `compile` &#8594; `flutter-maven-plugin:build`
-* `test` &#8594; `flutter-maven-plugin:test`
+* `clean` :arrow_right: `flutter-maven-plugin:clean`
+* `initialize` :arrow_right: `flutter-maven-plugin:dependencies`
+* `compile` :arrow_right: `flutter-maven-plugin:build`
+* `test` :arrow_right: `flutter-maven-plugin:test`
 
 ## Configuration options
 
