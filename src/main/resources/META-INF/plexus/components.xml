@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component-set>
+  <components>
+    <component>
+      <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+      <role-hint>flutter</role-hint>
+      <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+      <configuration>
+        <type>flutter</type>
+        <extension>jar</extension>
+        <language>dart</language>
+      </configuration>
+    </component>
+    <component>
+      <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+      <role-hint>flutter</role-hint>
+      <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+      <configuration>
+        <phases>
+          <clean>com.github.rivasdiaz:flutter-maven-plugin:clean</clean>
+          <initialize>com.github.rivasdiaz:flutter-maven-plugin:dependencies</initialize>
+          <compile>com.github.rivasdiaz:flutter-maven-plugin:build</compile>
+          <test>com.github.rivasdiaz:flutter-maven-plugin:test</test>
+        </phases>
+      </configuration>
+    </component>
+  </components>
+</component-set>
